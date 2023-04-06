@@ -8,11 +8,14 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.shahdat.reporter.ExtentManager;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
+
+import static org.shahdat.log.Logger.logstep;
 
 public class OrangeHRM_Tests {
     static WebDriver driver;
@@ -34,24 +37,24 @@ public class OrangeHRM_Tests {
             driver.manage().window().maximize();
             driver.get(URL);
         }else {
-            System.out.println("The browser name is not in scope");
+            logstep("The browser is not in scope");
         }
     }
     @BeforeTest(alwaysRun = true)
     @Parameters({"URL", "browserName"})
     public void openBrowser(String URL, String browserName){
-//        ExtentManager.startReport(); // for generating the report
+        ExtentManager.startReport(); // for generating the report
         setup(browserName, URL);
     }
 
     @AfterMethod(alwaysRun = true)
     public void endMethod(ITestResult result) throws Exception {
-//        ExtentManager.getResult(result, driver);      // for print each test in the report
+        ExtentManager.getResult(result, driver);      // for print each test in the report
     }
 
     @AfterTest(alwaysRun = true)
     public void endSession(){
-//        ExtentManager.stopReport();      // to stop the report
+        ExtentManager.stopReport();      // to stop the report
         driver.quit();
     }
 }
