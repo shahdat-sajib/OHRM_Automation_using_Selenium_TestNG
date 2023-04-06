@@ -5,8 +5,8 @@
         <!--                        <include name = "dashboard validation" />-->
         <!--                    </run>-->
         <!--                </groups>-->
-        <parameter name = "URL" value = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login" />
         <parameter name = "browserName" value = "chrome" />
+        <parameter name = "URL" value = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login" />
         <classes>
             <class name="EndToEndTest.OrangeHRM_Tests" />
         </classes>

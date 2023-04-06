@@ -9,11 +9,13 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.shahdat.reporter.ExtentManager;
+import org.shahdat.utilities.ExcelUtils;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.*;
+
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
 import static org.shahdat.log.Logger.logstep;
 
@@ -41,11 +43,27 @@ public class OrangeHRM_Tests {
         }
     }
     @BeforeTest(alwaysRun = true)
-    @Parameters({"URL", "browserName"})
-    public void openBrowser(String URL, String browserName){
-        ExtentManager.startReport(); // for generating the report
+    @Parameters({"browserName", "URL"})
+    public void openBrowser(String browserName, String URL){
+        ExtentManager.startReport();                  // for generating the report
         setup(browserName, URL);
     }
+
+    @DataProvider(name = "invalidLogin")
+    public Iterator<Object[]> InvalidLoginTestsDP() throws IOException {
+        return ExcelUtils.getExcelData("inValidLoginData");
+    }
+
+    @Test(priority = 1, dataProvider = "invalidLogin")
+    public void verifyInvalidLogin(Map<String, String> testData){
+        ExtentManager.logTest("Verify Invalid Login");
+        logstep(testData.get("userName"));
+        logstep(testData.get("password"));
+    }
+
+
+
+
 
     @AfterMethod(alwaysRun = true)
     public void endMethod(ITestResult result) throws Exception {
@@ -54,7 +72,7 @@ public class OrangeHRM_Tests {
 
     @AfterTest(alwaysRun = true)
     public void endSession(){
-        ExtentManager.stopReport();      // to stop the report
+        ExtentManager.stopReport();                    // to stop the report
         driver.quit();
     }
 }

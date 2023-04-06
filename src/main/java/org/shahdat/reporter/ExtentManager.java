@@ -28,7 +28,7 @@ public class ExtentManager {
         extent.attachReporter(spark);
         extent.setSystemInfo("Host Name", "SoftwareTestingMaterial");
         extent.setSystemInfo("Environment", "Production");
-        extent.setSystemInfo("User Name", "Abdullah Al Hisham");
+        extent.setSystemInfo("Author", "MD SHAHDAT HOSAIN");
         spark.config().setDocumentTitle("Title of the Report Comes here ");
         // Name of the report
         spark.config().setReportName("Name of the Report Comes here ");

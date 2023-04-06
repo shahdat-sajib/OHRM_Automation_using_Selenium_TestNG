@@ -1,1 +1,2 @@
-org\shahdat\Main.class
+org\shahdat\log\Logger.class
+org\shahdat\reporter\ExtentManager.class
