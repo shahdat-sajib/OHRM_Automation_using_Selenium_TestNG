@@ -8,6 +8,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.shahdat.pages.LoginPage;
 import org.shahdat.reporter.ExtentManager;
 import org.shahdat.utilities.ExcelUtils;
 import org.testng.ITestResult;
@@ -21,6 +22,7 @@ import static org.shahdat.log.Logger.logstep;
 
 public class OrangeHRM_Tests {
     static WebDriver driver;
+    static LoginPage objLoginPage;
 
     public static void setup(String browserName, String URL){
         WebDriverManager.chromedriver().arch64().setup();
@@ -57,8 +59,8 @@ public class OrangeHRM_Tests {
     @Test(priority = 1, dataProvider = "invalidLogin")
     public void verifyInvalidLogin(Map<String, String> testData){
         ExtentManager.logTest("Verify Invalid Login");
-        logstep(testData.get("userName"));
-        logstep(testData.get("password"));
+        objLoginPage = new LoginPage(driver);
+        objLoginPage.verifyErrorMessagesForInvalidLogin(testData.get("userName"), testData.get("password"));
     }
 
 
