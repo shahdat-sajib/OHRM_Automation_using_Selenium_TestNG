@@ -57,7 +57,7 @@ public class OrangeHRM_Tests {
     }
 
     @Test(priority = 1, dataProvider = "invalidLogin")
-    public void verifyInvalidLogin(Map<String, String> testData){
+    public void verifyInvalidLogin(Map<String, String> testData) throws InterruptedException {
         ExtentManager.logTest("Verify Invalid Login");
         objLoginPage = new LoginPage(driver);
         objLoginPage.verifyErrorMessagesForInvalidLogin(testData.get("userName"), testData.get("password"));

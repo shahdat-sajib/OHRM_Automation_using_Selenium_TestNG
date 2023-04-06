@@ -1,6 +1,7 @@
 package org.shahdat.utilities;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -15,8 +16,6 @@ public class ExcelUtils {
 
     public static Iterator<Object[]> getExcelData(String sheetName) {
         try {
-            //String filePath = ExcelUtils.class.getClassLoader().getResource("TestData.xlsx").getPath();
-            //FileInputStream fis = new FileInputStream(filePath);
             InputStream inputStream = ExcelUtils.class.getClassLoader().getResourceAsStream("TestData.xlsx");
             assert inputStream != null;
             XSSFWorkbook wb = new XSSFWorkbook(inputStream);
@@ -37,12 +36,16 @@ public class ExcelUtils {
                 Map<String, String> cellMap = new HashMap<>();
                 for (int j = 0; j < headers.length; j++) {
                     row = sh.getRow(i);
-                    cell = row.getCell(j);
-                    String value = getCellValue(cell);
-                    if ("n/a".equalsIgnoreCase(value)) {
+                    if (row == null) {
                         cellMap.put(headers[j], "");
                     } else {
-                        cellMap.put(headers[j], value);
+                        cell = row.getCell(j);
+                        String value = getCellValue(cell);
+                        if ("n/a".equalsIgnoreCase(value)) {
+                            cellMap.put(headers[j], "");
+                        } else {
+                            cellMap.put(headers[j], value);
+                        }
                     }
                 }
                 paramObj.add(new Object[]{cellMap});
@@ -56,17 +59,13 @@ public class ExcelUtils {
 
     private static String getCellValue(Cell cell) {
         DataFormatter formatter = new DataFormatter();
-        switch (cell.getCellType()) {
-            case STRING, NUMERIC, BLANK, BOOLEAN -> {
-                try {
-                    return formatter.formatCellValue(cell).trim();
-                } catch (ClassCastException e) {
-                    return String.valueOf(cell).trim();
-                }
-            }
-            default -> {
-                return "";
-            }
+        if (cell == null || cell.getCellType() == CellType.BLANK) {
+            return "";
+        } else {
+            return formatter.formatCellValue(cell).trim();
         }
     }
+
+
+
 }

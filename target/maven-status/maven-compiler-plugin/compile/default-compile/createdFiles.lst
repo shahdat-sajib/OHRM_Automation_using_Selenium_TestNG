@@ -1,2 +1,6 @@
+org\shahdat\utilities\ExcelUtils.class
 org\shahdat\log\Logger.class
 org\shahdat\reporter\ExtentManager.class
+org\shahdat\utilities\ExplicitWaitUtils.class
+org\shahdat\pages\LoginPage.class
+org\shahdat\utilities\ExcelUtils$1.class
