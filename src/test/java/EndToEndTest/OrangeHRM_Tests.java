@@ -8,6 +8,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.shahdat.pages.BasePage;
 import org.shahdat.pages.LoginPage;
 import org.shahdat.reporter.ExtentManager;
 import org.shahdat.utilities.ExcelUtils;
@@ -23,6 +24,7 @@ import static org.shahdat.log.Logger.logstep;
 public class OrangeHRM_Tests {
     static WebDriver driver;
     static LoginPage objLoginPage;
+    static BasePage objBasePage;
 
     public static void setup(String browserName, String URL){
         WebDriverManager.chromedriver().arch64().setup();
@@ -57,10 +59,30 @@ public class OrangeHRM_Tests {
     }
 
     @Test(priority = 1, dataProvider = "invalidLogin")
-    public void verifyInvalidLogin(Map<String, String> testData) throws InterruptedException {
+    public void verifyInvalidLogin(Map<String, String> testData) {
         ExtentManager.logTest("Verify Invalid Login");
         objLoginPage = new LoginPage(driver);
         objLoginPage.verifyErrorMessagesForInvalidLogin(testData.get("userName"), testData.get("password"), testData.get("requiredMsg"), testData.get("invalidMsg"));
+    }
+
+    @DataProvider(name = "validLoginData")
+    public Iterator<Object[]> validLoginDataTestsDP() throws IOException {
+        return ExcelUtils.getExcelData("validLoginData");
+    }
+
+    @Test(priority = 2, dataProvider = "validLoginData")
+    public void verifyLoginWithValidCredential(Map<String, String> testData) {
+        ExtentManager.logTest("Verify Login With Valid Credential");
+        objLoginPage = new LoginPage(driver);
+        objLoginPage.verifyUserLoginWithValidCredential(testData.get("userName"), testData.get("password"));
+        objLoginPage.verifyDashboardPageAppearance();
+    }
+
+    @Test(priority = 3)
+    public void verifyBasePageElementsVisibility() {
+        ExtentManager.logTest("Verify Login With Valid Credential");
+        objBasePage = new BasePage(driver);
+        objBasePage.verifyBasePageElementsVisibility("Basepage");
     }
 
 
