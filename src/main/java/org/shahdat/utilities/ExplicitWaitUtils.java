@@ -10,5 +10,6 @@ public class ExplicitWaitUtils {
     public static void waitForElementPresence(WebDriver driver, By elementLocator, int timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         wait.until(ExpectedConditions.presenceOfElementLocated(elementLocator));
+        wait.until(ExpectedConditions.elementToBeClickable(elementLocator));
     }
 }

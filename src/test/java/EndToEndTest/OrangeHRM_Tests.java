@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import static org.shahdat.log.Logger.logstep;
+import static org.shahdat.reporter.ExtentManager.logTest;
 
 public class OrangeHRM_Tests {
     static WebDriver driver;
@@ -60,7 +61,7 @@ public class OrangeHRM_Tests {
 
     @Test(priority = 1, dataProvider = "invalidLogin")
     public void verifyInvalidLogin(Map<String, String> testData) {
-        ExtentManager.logTest("Verify Invalid Login");
+        logTest("Verify Invalid Login");
         objLoginPage = new LoginPage(driver);
         objLoginPage.verifyErrorMessagesForInvalidLogin(testData.get("userName"), testData.get("password"), testData.get("requiredMsg"), testData.get("invalidMsg"));
     }
@@ -70,19 +71,24 @@ public class OrangeHRM_Tests {
         return ExcelUtils.getExcelData("validLoginData");
     }
 
-    @Test(priority = 2, dataProvider = "validLoginData")
+    @Test(priority = 2, dataProvider = "validLoginData", groups = "LoginWithValidCredential")
     public void verifyLoginWithValidCredential(Map<String, String> testData) {
-        ExtentManager.logTest("Verify Login With Valid Credential");
+        logTest("Verify Login With Valid Credential");
         objLoginPage = new LoginPage(driver);
         objLoginPage.verifyUserLoginWithValidCredential(testData.get("userName"), testData.get("password"));
-        objLoginPage.verifyDashboardPageAppearance();
+        objLoginPage.verifyDashboardPageAppearanceAfterLogin();
     }
-
-    @Test(priority = 3)
+    @Test(priority = 3, dependsOnGroups = "LoginWithValidCredential")
     public void verifyBasePageElementsVisibility() {
-        ExtentManager.logTest("Verify Login With Valid Credential");
+        logTest("Verify Base Page Elements Visibility");
         objBasePage = new BasePage(driver);
-        objBasePage.verifyBasePageElementsVisibility("Basepage");
+        objBasePage.verifyBasePageElementsVisibility();
+    }
+    @Test(priority = 4, dependsOnGroups = "LoginWithValidCredential")
+    public void verifySidebarMenuFunctionality() {
+        logTest("Verify Sidebar Collapse Button Functionality");
+        objBasePage = new BasePage(driver);
+        objBasePage.verifySidebarCollapseButtonFunctionality();
     }
 
 

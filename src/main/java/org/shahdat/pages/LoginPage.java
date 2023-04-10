@@ -10,12 +10,15 @@ import static org.shahdat.log.Logger.logstep;
 import static org.shahdat.utilities.AssertionUtils.verifyTextAssertion;
 import static org.shahdat.utilities.FormFillupUtils.fillupForm;
 import static org.shahdat.utilities.VisibilityUtils.visibilityCheck;
+import static org.testng.AssertJUnit.fail;
 
 public class LoginPage extends BasePage {
     private final WebDriver driver;
     private final By userNameLocator = By.xpath("//input[@placeholder='Username']");
     private final By passwordLocator = By.xpath("//input[@placeholder='Password']");
     private final By loginBtnLocator = By.xpath("//button[normalize-space()='Login']");
+    private final By dashboardPageTitleLocator = By.xpath("//div[@class='oxd-topbar-header-title']");
+    private final By dashboardPageUserDropdownLocator = By.xpath("//span[@class='oxd-userdropdown-tab']");
     private final By requiredLocator = By.xpath("//span[@class='oxd-text oxd-text--span oxd-input-field-error-message oxd-input-group__message']");
     private final By invalidMsgLocator = By.xpath("//p[@class='oxd-text oxd-text--p oxd-alert-content-text']");
     public LoginPage(WebDriver driver) {
@@ -50,8 +53,14 @@ public class LoginPage extends BasePage {
         driver.findElement(loginBtnLocator).submit();
         logstep("Login button pressed");
     }
-    public void verifyDashboardPageAppearance(){
-        verifyBasePageElementsVisibility("Dashboard");
+    public void verifyDashboardPageAppearanceAfterLogin(){
+        try {
+            visibilityCheck(driver, dashboardPageTitleLocator, "Dashboard Page Title");
+            visibilityCheck(driver, dashboardPageUserDropdownLocator, "After login, User Dropdown Menu");
+            logstep("Login Succeed");
+        } catch (Exception e) {
+            fail("Login Failed");
+        }
     }
 
 }
