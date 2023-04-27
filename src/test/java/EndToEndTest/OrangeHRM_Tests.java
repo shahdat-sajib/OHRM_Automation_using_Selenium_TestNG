@@ -86,7 +86,7 @@ public class OrangeHRM_Tests {
     }
     @Test(priority = 4, dependsOnGroups = "LoginWithValidCredential")
     public void verifySidebarCollapseExpandFunctionality() {
-        logTest("Verify Sidebar Collapse Button Functionality");
+        logTest("Verify Sidebar Collapse/Expand Button Functionality");
         objBasePage = new BasePage(driver);
         objBasePage.verifySidebarCollapseButtonFunctionality();
     }
