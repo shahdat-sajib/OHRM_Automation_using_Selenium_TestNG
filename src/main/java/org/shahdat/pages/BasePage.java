@@ -28,9 +28,7 @@ public class BasePage {
     private final By directoryOptnLocator = By.xpath("//span[normalize-space()='Directory']");
     private final By maintenanceOptnLocator = By.xpath("//span[normalize-space()='Maintenance']");
     private final By buzzOptnLocator = By.xpath("//span[normalize-space()='Buzz']");
-//    private final By collapseMenuBtnLocator = By.xpath("//i[@class='oxd-icon bi-chevron-left']");
     private final By collapseMenuBtnLocator = By.className("oxd-main-menu-button");
-//    private final By sidebarLocator = By.xpath("//*[@id=\"app\"]/div[1]/div[1]/aside/nav/div[2]/div/div/button/i");
     private final By sidebarLocator = By.className("oxd-sidepanel");
     public BasePage(WebDriver driver) {
         this.driver = driver;
