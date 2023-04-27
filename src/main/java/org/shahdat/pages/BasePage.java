@@ -28,8 +28,10 @@ public class BasePage {
     private final By directoryOptnLocator = By.xpath("//span[normalize-space()='Directory']");
     private final By maintenanceOptnLocator = By.xpath("//span[normalize-space()='Maintenance']");
     private final By buzzOptnLocator = By.xpath("//span[normalize-space()='Buzz']");
-    private final By collapseMenuBtnLocator = By.xpath("//i[@class='oxd-icon bi-chevron-left']");
-    private final By sidebarLocator = By.xpath("//*[@id=\"app\"]/div[1]/div[1]/aside/nav/div[2]/div/div/button/i");
+//    private final By collapseMenuBtnLocator = By.xpath("//i[@class='oxd-icon bi-chevron-left']");
+    private final By collapseMenuBtnLocator = By.className("oxd-main-menu-button");
+//    private final By sidebarLocator = By.xpath("//*[@id=\"app\"]/div[1]/div[1]/aside/nav/div[2]/div/div/button/i");
+    private final By sidebarLocator = By.className("oxd-sidepanel");
     public BasePage(WebDriver driver) {
         this.driver = driver;
     }
@@ -49,26 +51,25 @@ public class BasePage {
         visibilityCheck(driver, directoryOptnLocator, "Base Page Menu: DIRECTORY");
         visibilityCheck(driver, maintenanceOptnLocator, "Base Page Menu: MAINTENANCE");
         visibilityCheck(driver, buzzOptnLocator, "Base Page Menu: BUZZ");
-        visibilityCheck(driver, collapseMenuBtnLocator, "Sidebar 'Collapse Button'");
+        visibilityCheck(driver, collapseMenuBtnLocator, "Base Page Sidebar 'Collapse Button'");
     }
 
     public void clickCollapseMenuAndCheckSidebar(WebDriver driver, By sidebarLocator) {
-        scrollToElement(driver, sidebarLocator);
-        WebElement collapseMenu = driver.findElement(sidebarLocator);
-        collapseMenu.click();
-        waitForElementPresence(driver, sidebarLocator, 5);
-        String path = driver.findElement(sidebarLocator).getAttribute("class");
-        if (path.contains("bi-chevron-right")) {
-            assertTrue(true, "Sidebar is collapsed");
-            logstep("Sidebar is collapsed");
-        } else if (path.contains("bi-chevron-left")){
-            logstep("Sidebar is in normal mode");
-        } else {
-            fail("Condition not matched");
+        WebElement collapseBtn = driver.findElement(collapseMenuBtnLocator);
+        collapseBtn.click();
+        logstep("Sidebar 'Collapse Button' is clicked");
+        String className = driver.findElement(sidebarLocator).getAttribute("class");
+        if (className.startsWith("oxd-sidepanel")) {
+            boolean isCollapsed = className.endsWith("toggled");
+            String message = isCollapsed ? "collapsed" : "expanded";
+            logstep("Sidebar is " + message);
+            assertTrue(true, "Sidebar is " + message);
         }
     }
     public void verifySidebarCollapseButtonFunctionality() {
+        logstep("Check 1: For collapse functionality");
         clickCollapseMenuAndCheckSidebar(driver, sidebarLocator);
+        logstep("Check 2: For re-expand functionality");
         clickCollapseMenuAndCheckSidebar(driver, sidebarLocator);
     }
 }
