@@ -91,6 +91,13 @@ public class OrangeHRM_Tests {
         objBasePage.verifySidebarCollapseButtonFunctionality();
     }
 
+    @Test(priority = 5, dependsOnGroups = "LoginWithValidCredential")
+    public void verifyUserDropdownMenuItemsVisibility() {
+        logTest("Verify User Dropdown Menu Items Visibility");
+        objBasePage = new BasePage(driver);
+        objBasePage.verifyUserDropdownItemsVisibility();
+    }
+
 
 
 

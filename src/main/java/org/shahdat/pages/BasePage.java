@@ -4,6 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 import static org.shahdat.log.Logger.logstep;
 import static org.shahdat.utilities.ExplicitWaitUtils.waitForElementPresence;
 import static org.shahdat.utilities.ScrollUtils.scrollToElement;
@@ -30,12 +32,12 @@ public class BasePage {
     private final By buzzOptnLocator = By.xpath("//span[normalize-space()='Buzz']");
     private final By collapseMenuBtnLocator = By.className("oxd-main-menu-button");
     private final By sidebarLocator = By.className("oxd-sidepanel");
+    private final By userMenuItems = By.cssSelector("ul[class='oxd-dropdown-menu'] li");
     public BasePage(WebDriver driver) {
         this.driver = driver;
     }
     public void verifyBasePageElementsVisibility() {
         visibilityCheck(driver, basePageTitleLocator, "Base Page TITLE");
-        visibilityCheck(driver, basePageUserDropdownLocator, "Base Page USER DROPDOWN MENU");
         visibilityCheck(driver, basePageLogoLocator, "Base Page LOGO");
         visibilityCheck(driver, searchOptnLocator, "Base Page Menu: SEARCH");
         visibilityCheck(driver, adminOptnLocator, "Base Page Menu: ADMIN");
@@ -69,5 +71,18 @@ public class BasePage {
         clickCollapseMenuAndCheckSidebar(driver, sidebarLocator);
         logstep("Check 2: For re-expand functionality");
         clickCollapseMenuAndCheckSidebar(driver, sidebarLocator);
+    }
+
+    public void verifyUserDropdownItemsVisibility() {
+        visibilityCheck(driver, basePageUserDropdownLocator, "Base Page User Dropdown Button");
+        WebElement userDropdownBtn = driver.findElement(basePageUserDropdownLocator);
+        userDropdownBtn.click();
+        logstep("User dropdown button is clicked");
+        waitForElementPresence(driver, userMenuItems, 5);
+        List<WebElement> menuItemsList = driver.findElements(userMenuItems);
+        for (WebElement menuItem : menuItemsList) {
+            String menuItemText = menuItem.getText();
+            visibilityCheck(driver, By.xpath("//ul[@class='oxd-dropdown-menu']//li[normalize-space()='" + menuItemText + "']"), "Dropdown item '" + menuItemText + "'");
+        }
     }
 }
