@@ -3,15 +3,11 @@ package org.shahdat.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import java.util.List;
-
 import static org.shahdat.log.Logger.logstep;
 import static org.shahdat.utilities.ExplicitWaitUtils.waitForElementPresence;
-import static org.shahdat.utilities.ScrollUtils.scrollToElement;
 import static org.shahdat.utilities.VisibilityUtils.visibilityCheck;
 import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
 
 public class BasePage {
     private final WebDriver driver;

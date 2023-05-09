@@ -2,12 +2,9 @@ package org.shahdat.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
 import java.util.Objects;
-
 import static org.shahdat.utilities.ExplicitWaitUtils.waitForElementPresence;
 import static org.shahdat.log.Logger.logstep;
-import static org.shahdat.utilities.AssertionUtils.verifyTextAssertion;
 import static org.shahdat.utilities.FormFillupUtils.fillupForm;
 import static org.shahdat.utilities.VisibilityUtils.visibilityCheck;
 import static org.testng.AssertJUnit.fail;

@@ -10,7 +10,7 @@ public class AssertionUtils {
         waitForElementPresence(driver, elementLocator, 5);
         String actualText = driver.findElement(elementLocator).getText();
         if (expectedText.equalsIgnoreCase(actualText)) {
-            logstep(logMessage + " - Assertion Verified");
+            logstep(logMessage + "'" + actualText + "'" + " - Assertion Verified");
         } else {
             logstep(logMessage + " - Assertion Verification Failed. \nExpected: " + expectedText + ", Actual: " + actualText);
         }
