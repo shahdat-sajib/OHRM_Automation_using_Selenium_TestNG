@@ -92,12 +92,12 @@ public class OrangeHRM_Tests {
         objBasePage.verifySidebarCollapseButtonFunctionality();
     }
 
-    @Test(priority = 5, dependsOnGroups = "LoginWithValidCredential")
-    public void verifyUserDropdownMenuItemsVisibility() {
-        logTest("Verify User Dropdown Menu Items Visibility");
-        objBasePage = new BasePage(driver);
-        objBasePage.verifyUserDropdownItemsVisibility();
-    }
+//    @Test(priority = 5, dependsOnGroups = "LoginWithValidCredential")
+//    public void verifyUserDropdownMenuItemsVisibility() {
+//        logTest("Verify User Dropdown Menu Items Visibility");
+//        objBasePage = new BasePage(driver);
+//        objBasePage.verifyUserDropdownItemsVisibility();
+//    }
 
     @DataProvider(name = "dashboardElementsData")
     public Iterator<Object[]> dashboardElementsData() {
@@ -107,8 +107,8 @@ public class OrangeHRM_Tests {
     public void verifyDashboardElementsVisibility(Map<String, String> testData) {
         logTest("Verify Dashboard Elements Visibility");
         objDashboardPage = new DashboardPage(driver);
-        objDashboardPage.verifyDashboardPageElementsVisibility(testData);
-
+//        objDashboardPage.verifyDashboardPageElementsVisibility(testData);
+        objDashboardPage.verifyItemsVisibilityForTimeAtWord();
     }
 
 

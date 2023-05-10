@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="OHRM" />
+        <module name="OHRM_Automation_using_Selenium_TestNG" />
       </profile>
     </annotationProcessing>
   </component>

@@ -1,6 +1,11 @@
 org\shahdat\utilities\ExcelUtils.class
 org\shahdat\log\Logger.class
 org\shahdat\reporter\ExtentManager.class
+org\shahdat\utilities\FormFillupUtils.class
+org\shahdat\utilities\VisibilityUtils.class
+org\shahdat\utilities\ScrollUtils.class
+org\shahdat\pages\BasePage.class
 org\shahdat\utilities\ExplicitWaitUtils.class
+org\shahdat\pages\DashboardPage.class
 org\shahdat\pages\LoginPage.class
-org\shahdat\utilities\ExcelUtils$1.class
+org\shahdat\utilities\AssertionUtils.class
