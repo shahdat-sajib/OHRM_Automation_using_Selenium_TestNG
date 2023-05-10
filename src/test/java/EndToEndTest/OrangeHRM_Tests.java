@@ -108,7 +108,7 @@ public class OrangeHRM_Tests {
         logTest("Verify Dashboard Elements Visibility");
         objDashboardPage = new DashboardPage(driver);
 //        objDashboardPage.verifyDashboardPageElementsVisibility(testData);
-        objDashboardPage.verifyItemsVisibilityForTimeAtWord();
+        objDashboardPage.verifyItemsVisibilityForTimeAtWord(testData);
     }
 
 
