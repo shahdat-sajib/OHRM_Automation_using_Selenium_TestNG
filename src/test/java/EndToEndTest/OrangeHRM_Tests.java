@@ -30,10 +30,10 @@ public class OrangeHRM_Tests {
     static BasePage objBasePage;
     static DashboardPage objDashboardPage;
 
-    public static void setup(String browserName, String URL){
+    public static void setup(String browserName, String URL) {
         WebDriverManager.chromedriver().arch64().setup();
-        if (browserName.equalsIgnoreCase("chrome") || browserName.equalsIgnoreCase("firefox") || browserName.equalsIgnoreCase("edge")){
-            if (browserName.equalsIgnoreCase("chrome")){
+        if (browserName.equalsIgnoreCase("chrome") || browserName.equalsIgnoreCase("firefox") || browserName.equalsIgnoreCase("edge")) {
+            if (browserName.equalsIgnoreCase("chrome")) {
                 ChromeOptions options = new ChromeOptions();
                 options.addArguments("--remote-allow-origins=*");
                 driver = new ChromeDriver(options);
@@ -46,13 +46,14 @@ public class OrangeHRM_Tests {
             }
             driver.manage().window().maximize();
             driver.get(URL);
-        }else {
+        } else {
             logstep("The browser is not in scope");
         }
     }
+
     @BeforeTest(alwaysRun = true)
     @Parameters({"browserName", "URL"})
-    public void openBrowser(String browserName, String URL){
+    public void openBrowser(String browserName, String URL) {
         ExtentManager.startReport();                  // for generating the report
         setup(browserName, URL);
     }
@@ -61,17 +62,19 @@ public class OrangeHRM_Tests {
     public Iterator<Object[]> InvalidLoginTestsDP() throws IOException {
         return ExcelUtils.getExcelData("inValidLoginData");
     }
-//    @Test(priority = 1, dataProvider = "invalidLogin")
-//    public void verifyInvalidLogin(Map<String, String> testData) {
-//        logTest("Verify Invalid Login");
-//        objLoginPage = new LoginPage(driver);
-//        objLoginPage.verifyErrorMessagesForInvalidLogin(testData.get("userName"), testData.get("password"), testData.get("requiredMsg"), testData.get("invalidMsg"));
-//    }
+
+    @Test(priority = 1, dataProvider = "invalidLogin")
+    public void verifyInvalidLogin(Map<String, String> testData) {
+        logTest("Verify Invalid Login");
+        objLoginPage = new LoginPage(driver);
+        objLoginPage.verifyErrorMessagesForInvalidLogin(testData.get("userName"), testData.get("password"), testData.get("requiredMsg"), testData.get("invalidMsg"));
+    }
 
     @DataProvider(name = "validLoginData")
     public Iterator<Object[]> validLoginDataTestsDP() {
         return ExcelUtils.getExcelData("validLoginData");
     }
+
     @Test(priority = 2, dataProvider = "validLoginData", groups = "LoginWithValidCredential")
     public void verifyLoginWithValidCredential(Map<String, String> testData) {
         logTest("Verify Login With Valid Credential");
@@ -79,12 +82,14 @@ public class OrangeHRM_Tests {
         objLoginPage.verifyUserLoginWithValidCredential(testData.get("userName"), testData.get("password"));
         objLoginPage.verifyDashboardPageAppearanceAfterLogin();
     }
-//    @Test(priority = 3, dependsOnGroups = "LoginWithValidCredential")
-//    public void verifyBasePageElementsVisibility() {
-//        logTest("Verify Base Page Elements Visibility");
-//        objBasePage = new BasePage(driver);
-//        objBasePage.verifyBasePageElementsVisibility();
-//    }
+
+    @Test(priority = 3, dependsOnGroups = "LoginWithValidCredential")
+    public void verifyBasePageElementsVisibility() {
+        logTest("Verify Base Page Elements Visibility");
+        objBasePage = new BasePage(driver);
+        objBasePage.verifyBasePageElementsVisibility();
+    }
+
     @Test(priority = 4, dependsOnGroups = "LoginWithValidCredential")
     public void verifySidebarCollapseExpandFunctionality() {
         logTest("Verify Sidebar Collapse/Expand Button Functionality");
@@ -92,27 +97,39 @@ public class OrangeHRM_Tests {
         objBasePage.verifySidebarCollapseButtonFunctionality();
     }
 
-//    @Test(priority = 5, dependsOnGroups = "LoginWithValidCredential")
-//    public void verifyUserDropdownMenuItemsVisibility() {
-//        logTest("Verify User Dropdown Menu Items Visibility");
-//        objBasePage = new BasePage(driver);
-//        objBasePage.verifyUserDropdownItemsVisibility();
-//    }
+    @Test(priority = 5, dependsOnGroups = "LoginWithValidCredential")
+    public void verifyUserDropdownMenuItemsVisibility() {
+        logTest("Verify User Dropdown Menu Items Visibility");
+        objBasePage = new BasePage(driver);
+        objBasePage.verifyUserDropdownItemsVisibility();
+    }
 
     @DataProvider(name = "dashboardElementsData")
     public Iterator<Object[]> dashboardElementsData() {
         return ExcelUtils.getExcelData("dashboardElements");
     }
+
     @Test(priority = 6, dataProvider = "dashboardElementsData", dependsOnGroups = "LoginWithValidCredential")
     public void verifyDashboardElementsVisibility(Map<String, String> testData) {
         logTest("Verify Dashboard Elements Visibility");
         objDashboardPage = new DashboardPage(driver);
-//        objDashboardPage.verifyDashboardPageElementsVisibility(testData);
-        objDashboardPage.verifyItemsVisibilityForTimeAtWord(testData);
+        objDashboardPage.verifyDashboardPageElementsVisibility(testData);
+        objDashboardPage.verifyItemsVisibilityForTimeAtWord();
     }
 
+    @Test(priority = 7, dataProvider = "dashboardElementsData", dependsOnGroups = "LoginWithValidCredential")
+    public void verifyDashboarPunchOutTime(Map<String, String> testData) {
+        logTest("Verify Dashboard Punch Out Time");
+        objDashboardPage = new DashboardPage(driver);
+        objDashboardPage.verifyPunchOutAssertion(testData);
+    }
 
-
+    @Test(priority = 8, dataProvider = "dashboardElementsData", dependsOnGroups = "LoginWithValidCredential")
+    public void verifyDashboardWorkTime(Map<String, String> testData) {
+        logTest("Verify Dashboard Work Time");
+        objDashboardPage = new DashboardPage(driver);
+        objDashboardPage.verifyFullWokTime(testData);
+    }
 
 
     @AfterMethod(alwaysRun = true)
@@ -121,7 +138,7 @@ public class OrangeHRM_Tests {
     }
 
     @AfterTest(alwaysRun = true)
-    public void endSession(){
+    public void endSession() {
         ExtentManager.stopReport();                    // to stop the report
         driver.quit();
     }

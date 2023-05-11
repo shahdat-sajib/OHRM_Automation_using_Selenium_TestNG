@@ -4,13 +4,20 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.shahdat.log.Logger.logstep;
 import static org.shahdat.utilities.VisibilityUtils.visibilityCheck;
 import static org.shahdat.utilities.AssertionUtils.verifyTextAssertion;
+import static org.testng.Assert.*;
 
 public class DashboardPage {
     private final WebDriver driver;
@@ -39,35 +46,41 @@ public class DashboardPage {
     }
 
     public static String calculateFullTime(String timeStr) {
-        // Parse the time string into hours and minutes
-        String[] parts = timeStr.split(":");
-        int hours = Integer.parseInt(parts[0]);
-        int minutes = Integer.parseInt(parts[1]);
-
-        // Calculate the total minutes from 9.00 AM
-        int totalMinutes = (hours - 9) * 60 + minutes;
-
-        // Calculate the hours and minutes from the total minutes
-        int hoursFrom9 = totalMinutes / 60;
-        int minutesFrom9 = totalMinutes % 60;
-
-        // Return the formatted result
-        return String.format("%dh %02dm", hoursFrom9, minutesFrom9);
+        Pattern pattern = Pattern.compile("\\d{2}:\\d{2} [AP]M");
+        Matcher matcher = pattern.matcher(timeStr);
+        if (!matcher.find()) {
+            throw new IllegalArgumentException("Invalid time string");
+        }
+        String time = matcher.group();
+        LocalTime endTime = LocalTime.parse(time, java.time.format.DateTimeFormatter.ofPattern("hh:mm a"));
+        LocalTime startTime = LocalTime.of(9, 0, 0);
+        long diffMinutes = ChronoUnit.MINUTES.between(startTime, endTime);
+        int hours = (int) diffMinutes / 60;
+        int minutes = (int) diffMinutes % 60;
+        return String.format("%dh %02dm", hours, minutes);
     }
 
 
-    public void verifyItemsVisibilityForTimeAtWord(Map<String, String> testData){
+
+
+    public void verifyItemsVisibilityForTimeAtWord() {
         visibilityCheck(driver, CARD1_EMPLOYEE_IMG, "Employee image in 'Time at Work'");
         visibilityCheck(driver, CARD1_HEADER, "Card1 title: '" + driver.findElement(CARD1_HEADER).getText() + "'");
+    }
+
+    public void verifyPunchOutAssertion(Map<String, String> testData){
         String punch_time = ("Punched In: " + testData.get("Punch Time"));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d'th' 'at' HH:mm a '(GMT 'Z')'");
-        LocalDateTime dateTime = LocalDateTime.parse(testData.get("Punch Time"), formatter);
-        String timeStr = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+        verifyTextAssertion(driver, CARD1_PUNCH_TIME, punch_time, "Punch time");
+    }
 
-        verifyTextAssertion(driver, CARD1_PUNCH_TIME, punch_time, "Punch time ");
-        System.out.println(driver.findElement(CARD1_FULL_TIME).getText());
-
-        String fullTime = calculateFullTime(timeStr);
-        System.out.println(fullTime);
+    public void verifyFullWokTime(Map<String, String> testData) {
+        String CalculatedWorkTime = calculateFullTime(testData.get("Punch Time"));
+        String WorkTimeInUI = driver.findElement(CARD1_FULL_TIME).getText();
+        if (WorkTimeInUI.contains(CalculatedWorkTime)) {
+            logstep("Full office time " + WorkTimeInUI + "is asserted");
+            assertTrue(true, "Full office time " + WorkTimeInUI + " is asserted");
+        } else {
+            fail("Assertion failed. Expected: " + CalculatedWorkTime + "Today is not contains in Expected: " + WorkTimeInUI);
+        }
     }
 }
